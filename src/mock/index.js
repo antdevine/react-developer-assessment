@@ -31,7 +31,9 @@ createServer({
       const start = (page - 1) * perPage;
       const end = start + perPage;
 
-      
+      const allCategories = data.posts.flatMap(post => post.categories.map(cat => cat.name));
+      const uniqueCategories = [...new Set(allCategories)];
+
       const paginatedPosts = filteredPosts.slice(start, end);
       
       let error = null;
@@ -42,6 +44,7 @@ createServer({
 
       return {
         posts: paginatedPosts,
+        allCategories: uniqueCategories,
         meta: {
           total: filteredPosts.length,
           page,

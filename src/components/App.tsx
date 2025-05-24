@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Pagination from './Pagination';
+import CategoryFilter from './CategoryFilter';
 
 const App: React.FC = () => {
 
@@ -9,22 +10,27 @@ const App: React.FC = () => {
   const [totalPages, setTotalPages] = useState<any>(null);
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(10);
+  const [allCategories, setAllCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
 
   useEffect(() => {
     setLoading(true);
     setError(null);
     setPosts([]);
-    fetch(`/api/posts?page=${page}&perPage=${perPage}&category=Digital Marketing&search=dictumst`)
+    fetch(`/api/posts?page=${page}&perPage=${perPage}&category=${selectedCategory}&search=dictumst`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         if(data?.meta?.total) {
           setTotalPages(Math.ceil(data.meta.total / perPage));
         }
+        if(data?.allCategories) {
+          setAllCategories(data.allCategories);
+        }
         return data.error ? setError(data.error) : setPosts(data.posts);
       })
       .finally(() => setLoading(false));
-  }, [perPage, page]);
+  }, [perPage, page, selectedCategory]);
 
 
   const handlePerPageChange = (newPerPage: number) => {
@@ -35,8 +41,14 @@ const App: React.FC = () => {
     setPage(newPage);
   };
 
+  const handleCategoryChange = (selectedCategory: string) => {
+    setSelectedCategory(selectedCategory);
+  }
+
   return (
     <>
+      <CategoryFilter allCategories={allCategories} selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
+
       {loading ? 'Loading...' : null}
       {error ? <div className="error">{error}</div> : null}
       <div className="posts">
