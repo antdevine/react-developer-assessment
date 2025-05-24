@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Pagination from './Pagination';
 import CategoryFilter from './CategoryFilter';
+import Search from './Search';
 
 const App: React.FC = () => {
 
@@ -12,12 +13,14 @@ const App: React.FC = () => {
   const [perPage, setPerPage] = useState<number>(10);
   const [allCategories, setAllCategories] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     setLoading(true);
     setError(null);
     setPosts([]);
-    fetch(`/api/posts?page=${page}&perPage=${perPage}&category=${selectedCategory}&search=dictumst`)
+    fetch(`/api/posts?page=${page}&perPage=${perPage}&category=${selectedCategory}&search=${searchTerm}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -30,7 +33,7 @@ const App: React.FC = () => {
         return data.error ? setError(data.error) : setPosts(data.posts);
       })
       .finally(() => setLoading(false));
-  }, [perPage, page, selectedCategory]);
+  }, [perPage, page, selectedCategory, searchTerm]);
 
 
   const handlePerPageChange = (newPerPage: number) => {
@@ -45,9 +48,24 @@ const App: React.FC = () => {
     setSelectedCategory(selectedCategory);
   }
 
+  const handleInputChange = (searchInput: string) => {
+    setSearchInput(searchInput);
+  };
+
+  const handleSearch = () => {
+    setSearchTerm(searchInput.trim());
+  }
+
+  const handleClearSearch = () => {
+    setSearchInput('');
+    setSearchTerm('');
+  }
+
   return (
     <>
       <CategoryFilter allCategories={allCategories} selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
+
+      <Search searchTerm={searchTerm} searchInput={searchInput} onInputChange={handleInputChange} onSearch={handleSearch} onClearSearch={handleClearSearch} />
 
       {loading ? 'Loading...' : null}
       {error ? <div className="error">{error}</div> : null}

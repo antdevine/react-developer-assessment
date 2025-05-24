@@ -22,9 +22,9 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ selectedCategory, allCa
             <option value="" disabled hidden>Filter a Category</option>
             {allCategories.map((cat) => (<option key={cat} value={cat}>{cat}</option>))}
             </select>
-            </form>
 
-            <button disabled={selectedCategory === ''} onClick={() => onCategoryChange('')}>Reset Category Filter</button>
+            <button type="button" disabled={selectedCategory === ''} onClick={() => onCategoryChange('')}>Reset Category Filter</button>
+            </form>
         </>
     )
 }
