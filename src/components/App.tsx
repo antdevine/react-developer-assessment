@@ -76,7 +76,7 @@ const App: React.FC = () => {
         {posts.map((p) => (
           <div key={p.id} className="post">
             <h2>{p.title}</h2>
-            <p>{p.content}</p>
+            <p>{p.summary}</p>
           </div>
         ))}
       </div>
