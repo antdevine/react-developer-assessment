@@ -46,6 +46,7 @@ const App: React.FC = () => {
 
   const handleCategoryChange = (selectedCategory: string) => {
     setSelectedCategory(selectedCategory);
+    setPage(1);
   }
 
   const handleInputChange = (searchInput: string) => {
@@ -54,11 +55,13 @@ const App: React.FC = () => {
 
   const handleSearch = () => {
     setSearchTerm(searchInput.trim());
+    setPage(1);
   }
 
   const handleClearSearch = () => {
     setSearchInput('');
     setSearchTerm('');
+    setPage(1);
   }
 
   return (
