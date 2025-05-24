@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Pagination from './Pagination';
 import CategoryFilter from './CategoryFilter';
 import Search from './Search';
+import PostCard from './PostCard';
 
 const App: React.FC = () => {
 
@@ -72,15 +73,15 @@ const App: React.FC = () => {
 
       {loading ? 'Loading...' : null}
       {error ? <div className="error">{error}</div> : null}
-      <div className="posts">
-        {posts.map((p) => (
-          <div key={p.id} className="post">
-            <h2>{p.title}</h2>
-            <p>{p.summary}</p>
-          </div>
-        ))}
-      </div>
-
+      {
+        <div className="posts">
+          {posts.map((post) => (
+            <PostCard
+            post={post}
+          />
+          ))}
+        </div>
+      } 
       <Pagination totalPages={totalPages} page={page} perPage={perPage} onPerPageChange={handlePerPageChange} onPageChange={handlePageChange} />
     </>
   );
