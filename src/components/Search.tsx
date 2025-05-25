@@ -2,31 +2,36 @@ import styled from 'styled-components';
 import Button from './Button';
 
 interface SearchProps {
-    searchTerm: string;
-    searchInput: string;
-    onInputChange: (value: string) => void;
-    onSearch: (term: string) => void;
-    onClearSearch: () => void;
+  searchTerm: string;
+  searchInput: string;
+  onInputChange: (value: string) => void;
+  onSearch: (term: string) => void;
+  onClearSearch: () => void;
 }
 
-const Search: React.FC<SearchProps> = ({ searchTerm, searchInput, onInputChange, onSearch, onClearSearch }) => {
+const Search: React.FC<SearchProps> = ({
+  searchTerm,
+  searchInput,
+  onInputChange,
+  onSearch,
+  onClearSearch,
+}) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onInputChange(e.target.value);
+  };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onInputChange(e.target.value);
-      };
-    
-      const handleSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        onSearch(searchInput.trim());
-      }
-    
-      const handleClearSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        onClearSearch();
-      }
+  const handleSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onSearch(searchInput.trim());
+  };
 
-    return(
-            <SearchForm>
+  const handleClearSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onClearSearch();
+  };
+
+  return (
+    <SearchForm>
       <SearchInput
         type="text"
         placeholder="Search posts..."
@@ -37,18 +42,12 @@ const Search: React.FC<SearchProps> = ({ searchTerm, searchInput, onInputChange,
         Search
       </Button>
 
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={handleClearSearch}
-        disabled={!searchTerm}
-      >
+      <Button type="button" variant="secondary" onClick={handleClearSearch} disabled={!searchTerm}>
         Clear
       </Button>
-
     </SearchForm>
-    );
-}
+  );
+};
 
 const SearchForm = styled.form`
   display: flex;

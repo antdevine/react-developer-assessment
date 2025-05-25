@@ -35,7 +35,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       </AuthorSection>
 
       <CategoryContainer>
-        {post.categories.map(cat => (
+        {post.categories.map((cat) => (
           <CategoryChip key={cat.id}>{cat.name}</CategoryChip>
         ))}
       </CategoryContainer>

@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import SkeletonCard from './SkeletonCard';
 
 const App: React.FC = () => {
-
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,20 +22,21 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     setPosts([]);
-    fetch(`/api/posts?page=${page}&perPage=${perPage}&category=${selectedCategory}&search=${searchTerm}`)
+    fetch(
+      `/api/posts?page=${page}&perPage=${perPage}&category=${selectedCategory}&search=${searchTerm}`,
+    )
       .then((res) => res.json())
       .then((data) => {
-        if(data?.meta?.total) {
+        if (data?.meta?.total) {
           setTotalPages(Math.ceil(data.meta.total / perPage));
         }
-        if(data?.allCategories) {
+        if (data?.allCategories) {
           setAllCategories(data.allCategories);
         }
         return data.error ? setError(data.error) : setPosts(data.posts);
       })
       .finally(() => setLoading(false));
   }, [perPage, page, selectedCategory, searchTerm]);
-
 
   const handlePerPageChange = (newPerPage: number) => {
     setPerPage(newPerPage);
@@ -49,7 +49,7 @@ const App: React.FC = () => {
   const handleCategoryChange = (selectedCategory: string) => {
     setSelectedCategory(selectedCategory);
     setPage(1);
-  }
+  };
 
   const handleInputChange = (searchInput: string) => {
     setSearchInput(searchInput);
@@ -58,35 +58,46 @@ const App: React.FC = () => {
   const handleSearch = () => {
     setSearchTerm(searchInput.trim());
     setPage(1);
-  }
+  };
 
   const handleClearSearch = () => {
     setSearchInput('');
     setSearchTerm('');
     setPage(1);
-  }
+  };
 
   return (
     <>
-    <h1>Posts</h1>
-      <CategoryFilter allCategories={allCategories} selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
+      <h1>Posts</h1>
+      <CategoryFilter
+        allCategories={allCategories}
+        selectedCategory={selectedCategory}
+        onCategoryChange={handleCategoryChange}
+      />
 
-      <Search searchTerm={searchTerm} searchInput={searchInput} onInputChange={handleInputChange} onSearch={handleSearch} onClearSearch={handleClearSearch} />
+      <Search
+        searchTerm={searchTerm}
+        searchInput={searchInput}
+        onInputChange={handleInputChange}
+        onSearch={handleSearch}
+        onClearSearch={handleClearSearch}
+      />
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
       {
         <PostsGrid>
-        {loading
-          ? Array.from({ length: perPage }).map((_, i) => (
-              <SkeletonCard key={i} />
-            ))
-          : posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-      </PostsGrid>
-      
-      } 
-      <Pagination totalPages={totalPages} page={page} perPage={perPage} onPerPageChange={handlePerPageChange} onPageChange={handlePageChange} />
+          {loading
+            ? Array.from({ length: perPage }).map((_, i) => <SkeletonCard key={i} />)
+            : posts.map((post) => <PostCard key={post.id} post={post} />)}
+        </PostsGrid>
+      }
+      <Pagination
+        totalPages={totalPages}
+        page={page}
+        perPage={perPage}
+        onPerPageChange={handlePerPageChange}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 };

@@ -12,33 +12,34 @@ createServer({
       const filterCategory = request.queryParams.category || '';
       const searchTerm = request.queryParams.search || '';
       const searchLower = searchTerm.toLowerCase();
-    
+
       let filteredPosts = data.posts;
-    
+
       if (filterCategory) {
-        filteredPosts = filteredPosts.filter(post =>
-          post.categories.some(cat => cat.name === filterCategory)
+        filteredPosts = filteredPosts.filter((post) =>
+          post.categories.some((cat) => cat.name === filterCategory),
         );
       }
 
       if (searchTerm) {
-        filteredPosts = filteredPosts.filter(post =>
-          post.title.toLowerCase().includes(searchLower) ||
-          post.summary.toLowerCase().includes(searchLower)
+        filteredPosts = filteredPosts.filter(
+          (post) =>
+            post.title.toLowerCase().includes(searchLower) ||
+            post.summary.toLowerCase().includes(searchLower),
         );
       }
-    
+
       const start = (page - 1) * perPage;
       const end = start + perPage;
 
-      const allCategories = data.posts.flatMap(post => post.categories.map(cat => cat.name));
+      const allCategories = data.posts.flatMap((post) => post.categories.map((cat) => cat.name));
       const uniqueCategories = [...new Set(allCategories)];
 
       const paginatedPosts = filteredPosts.slice(start, end);
-      
+
       let error = null;
 
-      if( paginatedPosts.length === 0) {
+      if (paginatedPosts.length === 0) {
         error = 'No posts found for the given page.';
       }
 
@@ -48,12 +49,10 @@ createServer({
         meta: {
           total: filteredPosts.length,
           page,
-          perPage
+          perPage,
         },
-        error
+        error,
       };
     });
-    
-    
   },
 });

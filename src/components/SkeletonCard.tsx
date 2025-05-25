@@ -14,9 +14,11 @@ const SkeletonCard = () => {
       </AuthorSection>
 
       <CategoryContainer>
-        {Array(3).fill(null).map((_, i) => (
-          <Skeleton key={i} height={24} width={80} style={{ borderRadius: '9999px' }} />
-        ))}
+        {Array(3)
+          .fill(null)
+          .map((_, i) => (
+            <Skeleton key={i} height={24} width={80} style={{ borderRadius: '9999px' }} />
+          ))}
       </CategoryContainer>
     </Card>
   );

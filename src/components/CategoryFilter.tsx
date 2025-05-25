@@ -2,19 +2,22 @@ import styled from 'styled-components';
 import Button from './Button';
 
 interface CategoryFilterProps {
-    selectedCategory: string;
-    allCategories: string[];
-    onCategoryChange: (selectedCategory: string) => void;
+  selectedCategory: string;
+  allCategories: string[];
+  onCategoryChange: (selectedCategory: string) => void;
 }
 
-const CategoryFilter: React.FC<CategoryFilterProps> = ({ selectedCategory, allCategories, onCategoryChange }) => {
+const CategoryFilter: React.FC<CategoryFilterProps> = ({
+  selectedCategory,
+  allCategories,
+  onCategoryChange,
+}) => {
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onCategoryChange(e.target.value);
+  };
 
-    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onCategoryChange(e.target.value);
-      }
-
-    return (
-        <FilterForm>
+  return (
+    <FilterForm>
       <CategorySelect
         name="selectCategory"
         id="selectCategory"
@@ -32,17 +35,16 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ selectedCategory, allCa
       </CategorySelect>
 
       <Button
-  type="button"
-  variant="secondary"
-  disabled={selectedCategory === ''}
-  onClick={() => onCategoryChange('')}
->
-  Reset Filter
-</Button>
-
+        type="button"
+        variant="secondary"
+        disabled={selectedCategory === ''}
+        onClick={() => onCategoryChange('')}
+      >
+        Reset Filter
+      </Button>
     </FilterForm>
-    )
-}
+  );
+};
 
 const FilterForm = styled.form`
   display: flex;
@@ -67,6 +69,5 @@ const CategorySelect = styled.select`
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
   }
 `;
-
 
 export default CategoryFilter;

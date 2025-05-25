@@ -2,37 +2,43 @@ import styled from 'styled-components';
 import Button from './Button';
 
 interface PaginationProps {
-    totalPages: number;
-    page: number;
-    perPage: number;
-    onPerPageChange: (perPage: number) => void;
-    onPageChange: (page: number) => void;
-  }
+  totalPages: number;
+  page: number;
+  perPage: number;
+  onPerPageChange: (perPage: number) => void;
+  onPageChange: (page: number) => void;
+}
 
-const Pagination: React.FC<PaginationProps> = ({ totalPages, page, perPage, onPerPageChange, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  totalPages,
+  page,
+  perPage,
+  onPerPageChange,
+  onPageChange,
+}) => {
+  const handleAmountPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onPerPageChange(Number(e.target.value));
+  };
 
-    const handleAmountPerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onPerPageChange(Number(e.target.value));
-      };
-    
-      const handlePrevPage = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        onPageChange(page - 1);
-      };
-    
-      const handleNextPage = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        onPageChange(page  + 1);
-      };
+  const handlePrevPage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onPageChange(page - 1);
+  };
 
-    return (
-        <PaginationWrapper>
+  const handleNextPage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onPageChange(page + 1);
+  };
+
+  return (
+    <PaginationWrapper>
       <Button onClick={handlePrevPage} disabled={page <= 1} variant="primary">
         Previous
       </Button>
 
-
-      <PageInfo>Page {page} of {totalPages}</PageInfo>
+      <PageInfo>
+        Page {page} of {totalPages}
+      </PageInfo>
 
       <Label htmlFor="amountPerPage">Amount per page</Label>
       <PerPageSelect
@@ -48,10 +54,9 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, page, perPage, onPe
       <Button onClick={handleNextPage} disabled={page === totalPages} variant="primary">
         Next
       </Button>
-
     </PaginationWrapper>
-    )
-}
+  );
+};
 
 const PaginationWrapper = styled.form`
   display: flex;
@@ -88,6 +93,5 @@ const PerPageSelect = styled.select`
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
   }
 `;
-
 
 export default Pagination;

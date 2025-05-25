@@ -52,5 +52,4 @@ const StyledButton = styled.button<{ $variant: ButtonVariant }>`
   }
 `;
 
-
 export default Button;
