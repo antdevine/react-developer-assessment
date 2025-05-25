@@ -1,3 +1,6 @@
+import styled from 'styled-components';
+import Button from './Button';
+
 interface SearchProps {
     searchTerm: string;
     searchInput: string;
@@ -23,14 +26,53 @@ const Search: React.FC<SearchProps> = ({ searchTerm, searchInput, onInputChange,
       }
 
     return(
-        <>
-            <form className="search">
-                <input type="text" placeholder="Search posts..." onChange={handleInputChange} value={searchInput}/>
-                <button type="submit" onClick={handleSearch}>Search</button>
-                <button type="button" onClick={handleClearSearch} disabled={!searchTerm}>Clear Search</button>
-            </form>
-        </>
+            <SearchForm>
+      <SearchInput
+        type="text"
+        placeholder="Search posts..."
+        onChange={handleInputChange}
+        value={searchInput}
+      />
+      <Button type="submit" variant="primary" onClick={handleSearch}>
+        Search
+      </Button>
+
+      <Button
+        type="button"
+        variant="secondary"
+        onClick={handleClearSearch}
+        disabled={!searchTerm}
+      >
+        Clear
+      </Button>
+
+    </SearchForm>
     );
 }
+
+const SearchForm = styled.form`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 2rem auto;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SearchInput = styled.input`
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--text-light-gray);
+  width: 260px;
+  background-color: var(--text-white);
+  color: var(--text-gray);
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+  }
+`;
 
 export default Search;

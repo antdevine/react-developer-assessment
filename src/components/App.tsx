@@ -3,6 +3,8 @@ import Pagination from './Pagination';
 import CategoryFilter from './CategoryFilter';
 import Search from './Search';
 import PostCard from './PostCard';
+import styled from 'styled-components';
+import SkeletonCard from './SkeletonCard';
 
 const App: React.FC = () => {
 
@@ -24,7 +26,6 @@ const App: React.FC = () => {
     fetch(`/api/posts?page=${page}&perPage=${perPage}&category=${selectedCategory}&search=${searchTerm}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if(data?.meta?.total) {
           setTotalPages(Math.ceil(data.meta.total / perPage));
         }
@@ -67,24 +68,51 @@ const App: React.FC = () => {
 
   return (
     <>
+    <h1>Posts</h1>
       <CategoryFilter allCategories={allCategories} selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
 
       <Search searchTerm={searchTerm} searchInput={searchInput} onInputChange={handleInputChange} onSearch={handleSearch} onClearSearch={handleClearSearch} />
 
-      {loading ? 'Loading...' : null}
-      {error ? <div className="error">{error}</div> : null}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       {
-        <div className="posts">
-          {posts.map((post) => (
-            <PostCard
-            post={post}
-          />
-          ))}
-        </div>
+        <PostsGrid>
+        {loading
+          ? Array.from({ length: perPage }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))
+          : posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+      </PostsGrid>
+      
       } 
       <Pagination totalPages={totalPages} page={page} perPage={perPage} onPerPageChange={handlePerPageChange} onPageChange={handlePageChange} />
     </>
   );
 };
+
+const PostsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  background-color: var(--light-red);
+  color: var(--text-red);
+  border: 1px solid var(--text-white);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin: 1rem auto;
+  max-width: 600px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.95rem;
+`;
 
 export default App;
