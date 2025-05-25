@@ -104,12 +104,12 @@ const App: React.FC = () => {
 
 const PostsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5rem;
   padding: 2rem;
 
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   }
 `;
 
