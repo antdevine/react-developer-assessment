@@ -7,6 +7,7 @@ interface SearchProps {
   onInputChange: (value: string) => void;
   onSearch: (term: string) => void;
   onClearSearch: () => void;
+  disabledSubmit?: boolean;
 }
 
 const Search: React.FC<SearchProps> = ({
@@ -15,6 +16,7 @@ const Search: React.FC<SearchProps> = ({
   onInputChange,
   onSearch,
   onClearSearch,
+  disabledSubmit = false,
 }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onInputChange(e.target.value);
@@ -38,7 +40,7 @@ const Search: React.FC<SearchProps> = ({
         onChange={handleInputChange}
         value={searchInput}
       />
-      <Button type="submit" variant="primary" onClick={handleSearch}>
+      <Button type="submit" variant="primary" onClick={handleSearch} disabled={disabledSubmit}>
         Search
       </Button>
 

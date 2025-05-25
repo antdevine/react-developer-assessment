@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+import SkeletonCard from './SkeletonCard';
 import Pagination from './Pagination';
 import CategoryFilter from './CategoryFilter';
 import Search from './Search';
 import PostCard from './PostCard';
-import styled from 'styled-components';
-import SkeletonCard from './SkeletonCard';
 
 const App: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -18,16 +19,24 @@ const App: React.FC = () => {
   const [searchInput, setSearchInput] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  useEffect(() => {
+  const resetPosts = () => {
     setLoading(true);
     setError(null);
     setPosts([]);
+  };
+
+  const fetchPosts = async (params: {
+    page: number;
+    perPage: number;
+    selectedCategory: string;
+    searchTerm: string;
+  }) => {
     fetch(
       `/api/posts?page=${page}&perPage=${perPage}&category=${selectedCategory}&search=${searchTerm}`,
     )
       .then((res) => res.json())
       .then((data) => {
-        if (data?.meta?.total) {
+        if (data?.meta?.total && perPage > 0) {
           setTotalPages(Math.ceil(data.meta.total / perPage));
         }
         if (data?.allCategories) {
@@ -36,6 +45,11 @@ const App: React.FC = () => {
         return data.error ? setError(data.error) : setPosts(data.posts);
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    resetPosts();
+    fetchPosts({ page, perPage, selectedCategory, searchTerm });
   }, [perPage, page, selectedCategory, searchTerm]);
 
   const handlePerPageChange = (newPerPage: number) => {
@@ -81,6 +95,7 @@ const App: React.FC = () => {
         onInputChange={handleInputChange}
         onSearch={handleSearch}
         onClearSearch={handleClearSearch}
+        disabledSubmit={loading}
       />
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
